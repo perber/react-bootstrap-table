@@ -3,6 +3,7 @@ import Const from './Const';
 import TableRow from './TableRow';
 import TableColumn from './TableColumn';
 import TableEditColumn from './TableEditColumn';
+import TableFooter from './TableFooter';
 import classSet from 'classnames';
 
 class TableBody extends React.Component{
@@ -107,6 +108,7 @@ class TableBody extends React.Component{
           <tbody>
             {tableRows}
           </tbody>
+          <TableFooter accumulatedData={this.props.accumulatedData} columns={this.props.columns} />
         </table>
       </div>
     )

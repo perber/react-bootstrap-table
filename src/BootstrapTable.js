@@ -50,6 +50,7 @@ class BootstrapTable extends React.Component{
 
     this.state = {
       data: this.getTableData(),
+      accumulatedData: this.props.accumulatedData,
       selectedRowKeys: this.store.getSelectedRowKeys()
     };
   }
@@ -132,7 +133,7 @@ class BootstrapTable extends React.Component{
                        onSelectAllRow={this.handleSelectAllRow.bind(this)}>
             {this.props.children}
           </TableHeader>
-          <TableBody ref="body" data={this.state.data} columns={columns}
+          <TableBody ref="body" data={this.state.data} columns={columns} accumulatedData={this.state.accumulatedData}
             striped={this.props.striped}
             hover={this.props.hover}
             keyField={this.store.getKeyField()}
@@ -142,6 +143,7 @@ class BootstrapTable extends React.Component{
             selectedRowKeys={this.state.selectedRowKeys}
             onSelectRow={this.handleSelectRow.bind(this)}/>
           {tableFilter}
+
         </div>
         {pagination}
       </div>

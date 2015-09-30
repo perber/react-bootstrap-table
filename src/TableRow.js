@@ -26,6 +26,7 @@ class TableRow extends React.Component{
     }
   }
 }
+
 TableRow.propTypes = {
   isSelected: React.PropTypes.bool,
   enableCellEdit: React.PropTypes.bool,

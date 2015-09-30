@@ -66,6 +66,7 @@ class PaginationList extends React.Component{
               <li role="presentation"><a role="menuitem" tabIndex="-1" href="#" onClick={this.changeSizePerPage.bind(this)}>25</a></li>
               <li role="presentation"><a role="menuitem" tabIndex="-1" href="#" onClick={this.changeSizePerPage.bind(this)}>30</a></li>
               <li role="presentation"><a role="menuitem" tabIndex="-1" href="#" onClick={this.changeSizePerPage.bind(this)}>50</a></li>
+              <li role="presentation"><a role="menuitem" tabIndex="-1" href="#" onClick={this.changeSizePerPage.bind(this)}>100</a></li>
             </ul>
           </div>
         </div>

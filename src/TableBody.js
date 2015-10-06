@@ -8,17 +8,32 @@ import classSet from 'classnames';
 
 class TableBody extends React.Component{
 
+  static defaultProps = {
+    accumulatedData: {}
+  };
+
   constructor(props) {
-		super(props);
+    super(props);
+
     this.state = {
-      currEditCell: null
+      columns: props.columns,
+      currEditCell: null,
+      accumulatedData: props.accumulatedData
     };
+
     this.editing = false;
   }
 
+  componentWillReceiveProps(props) {
+    this.setState({
+      accumulatedData: props.accumulatedData,
+      columns: props.columns
+    });
+  }
+
+
   render(){
     var containerClasses = classSet("table-container");
-
     var tableClasses = classSet("table", "table-bordered", {
       'table-striped': this.props.striped,
       'table-hover': this.props.hover,
@@ -29,7 +44,7 @@ class TableBody extends React.Component{
     var tableHeader = this.renderTableHeader(isSelectRowDefined);
 
     var tableRows = this.props.data.map(function(data, r){
-      var tableColumns = this.props.columns.map(function(column, i){
+      var tableColumns = this.state.columns.map(function(column, i){
         var fieldValue = data[column.name];
         if(this.editing &&
           column.name !== this.props.keyField && // Key field can't be edit
@@ -93,7 +108,7 @@ class TableBody extends React.Component{
     if(tableRows.length === 0){
       tableRows.push(
       <TableRow key="##table-empty##">
-        <td colSpan={this.props.columns.length+(isSelectRowDefined?1:0)}
+        <td colSpan={this.state.columns.length+(isSelectRowDefined?1:0)}
             style={{ textAlign: "center" }}>
             There is no data to display
         </td>
@@ -108,7 +123,9 @@ class TableBody extends React.Component{
           <tbody>
             {tableRows}
           </tbody>
-          <TableFooter accumulatedData={this.props.accumulatedData} columns={this.props.columns} />
+          <tfoot>
+            <TableFooter accumulatedData={this.state.accumulatedData} columns={this.props.columns} />
+          </tfoot>
         </table>
       </div>
     )
@@ -123,7 +140,7 @@ class TableBody extends React.Component{
       }
       selectRowHeader = this.props.selectRow.hideSelectColumn?null:(<th style={style} key={-1}></th>);
     }
-    var theader = this.props.columns.map(function(column, i){
+    var theader = this.state.columns.map(function(column, i){
       let style={
         display: column.hidden?"none":null,
         width: column.width

@@ -79,6 +79,10 @@ class BootstrapTable extends React.Component{
         selectedRowKeys: nextProps.selectRow.selected
       });
     }
+
+    if(nextProps.accumulatedData) {
+      this.setState({accumulatedData: nextProps.accumulatedData});
+    }
   }
 
   componentDidUpdate(){
@@ -121,6 +125,7 @@ class BootstrapTable extends React.Component{
     var pagination = this.renderPagination();
     var toolBar = this.renderToolBar();
     var tableFilter = this.renderTableFilter(columns);
+
     return(
       <div className="react-bs-container">
         {toolBar}

@@ -20,20 +20,18 @@ export default class TableFooter extends React.Component{
     }
 
     static _createStateObject(props) {
+
         return {accumulatedData: props.accumulatedData, columns: props.columns};
     }
 
     render(){
         if(_.isEmpty(this.state.accumulatedData)) {
-            return null;
+            return <div />
         }
-
         return(
-            <tfoot>
-                <tr ref="footer">
-                    {this._renderAccumulatedData(this.state.accumulatedData)}
-                </tr>
-            </tfoot>
+            <tr ref="footer">
+                {this._renderAccumulatedData()}
+            </tr>
         )
     }
 
@@ -41,18 +39,24 @@ export default class TableFooter extends React.Component{
         return this.state.columns.map( (column, i) => {
             const dataField = column.name;
             const formatData = column.format;
+
             if(!(dataField in this.state.accumulatedData)) {
-                return <TableColumn key={i} {...this.state.accumulatedData}><span> </span></TableColumn>;
+                return <TableColumn key={i}  />;
             }
 
-            let value = this.state.accumulatedData[column.dataField];
+            let value = this.state.accumulatedData[column.name];
 
             if(formatData) {
-                value = formatData(this.state.accumulatedData[column.dataField], this.state.accumulatedData);
+                const formattedValue = formatData(value, this.state.accumulatedData);
+                if (!React.isValidElement(formattedValue)) {
+                    value = <div dangerouslySetInnerHTML={{__html: formattedValue}}></div>;
+                }
+                else {
+                    value = formattedValue
+                }
             }
 
-            return <TableColumn key={i} {...this.state.accumulatedData}>{value}</TableColumn>
-
+            return <TableColumn key={i} dataAlign={column.align}>{value}</TableColumn>
         });
     }
 }

@@ -12,7 +12,7 @@ class TableHeaderColumn extends React.Component{
     var dom = this.refs.innerDiv.getDOMNode();
     this.order = this.order == Const.SORT_DESC?Const.SORT_ASC:Const.SORT_DESC;
     this.props.clearSortCaret(this.order, this.props.dataField);
-    dom.appendChild(Util.renderSortCaret(this.order));
+    dom.insertBefore(Util.renderSortCaret(this.order), dom.firstChild);
   }
 
   componentDidMount(){

@@ -6,6 +6,10 @@ import TableEditColumn from './TableEditColumn';
 import TableFooter from './TableFooter';
 import classSet from 'classnames';
 
+var isFun=function(obj){
+  return obj&&(typeof obj==="function");
+
+};
 class TableBody extends React.Component{
 
   static defaultProps = {
@@ -34,8 +38,9 @@ class TableBody extends React.Component{
 
   render(){
     var containerClasses = classSet("table-container");
-    var tableClasses = classSet("table", "table-bordered", {
+    var tableClasses = classSet("table", {
       'table-striped': this.props.striped,
+      'table-bordered': this.props.bordered,
       'table-hover': this.props.hover,
       'table-condensed': this.props.condensed
     });
@@ -52,8 +57,15 @@ class TableBody extends React.Component{
           this.state.currEditCell != null &&
           this.state.currEditCell.rid == r &&
           this.state.currEditCell.cid == i){
-            return(
+            var format=column.format?function(value){
+              return column.format(value,data).replace(/<.*?>/g,'');
+            }:false;
+
+          return(
               <TableEditColumn completeEdit={this.handleCompleteEditCell.bind(this)}
+                               //add by bluespring for column editor customize
+                               editable={isFun(column.editable)?column.editable(fieldValue,data,r,i):column.editable}
+                               format={column.format?format:false}
                                key={i}
                                blurToSave={this.props.cellEdit.blurToSave}
                                rowIndex={r}
@@ -62,6 +74,9 @@ class TableBody extends React.Component{
               </TableEditColumn>
             )
         } else{
+          //add by bluespring for className customize
+          var tdClassName=isFun(column.className)?column.className(fieldValue,data,r,i):column.className;
+
           if(typeof column.format !== "undefined"){
             var formattedValue = column.format(fieldValue, data);
             if (!React.isValidElement(formattedValue)) {
@@ -70,7 +85,7 @@ class TableBody extends React.Component{
             return(
               <TableColumn dataAlign={column.align}
                            key={i}
-                           className={column.className}
+                           className={tdClassName}
                            cellEdit={this.props.cellEdit}
                            onEdit={this.handleEditCell.bind(this)}
                            width={column.width}>
@@ -81,7 +96,7 @@ class TableBody extends React.Component{
             return(
               <TableColumn dataAlign={column.align}
                            key={i}
-                           className={column.className}
+                           className={tdClassName}
                            cellEdit={this.props.cellEdit}
                            hidden={column.hidden}
                            onEdit={this.handleEditCell.bind(this)}
@@ -95,12 +110,15 @@ class TableBody extends React.Component{
       var selected = this.props.selectedRowKeys.indexOf(data[this.props.keyField]) != -1;
       var selectRowColumn = isSelectRowDefined && !this.props.selectRow.hideSelectColumn?
                               this.renderSelectRowColumn(selected):null;
+      //add by bluespring for className customize
+      var trClassName=isFun(this.props.trClassName)?this.props.trClassName(data,r):this.props.trClassName;
       return (
-        <TableRow isSelected={selected} key={r}
+        <TableRow isSelected={selected} key={r} className={trClassName}
           selectRow={isSelectRowDefined?this.props.selectRow:undefined}
           enableCellEdit={this.props.cellEdit.mode !== Const.CELL_EDIT_NONE}
           onSelectRow={this.handleSelectRow.bind(this)}>
-          {selectRowColumn}{tableColumns}
+          {selectRowColumn}
+          {tableColumns}
         </TableRow>
       )
     }, this);
@@ -196,6 +214,13 @@ class TableBody extends React.Component{
     this.setState(stateObj);
   }
 
+  cancelEdit(){
+    var currEditCell=this.state.currEditCell;
+    if(currEditCell){
+      this.handleCompleteEditCell(null,currEditCell.rid,currEditCell.cid);
+    }
+  }
+
   handleCompleteEditCell(newVal, rowIndex, columnIndex){
     this.setState({currEditCell: null});
     if(null != newVal)
@@ -206,7 +231,7 @@ class TableBody extends React.Component{
     if(this.props.selectRow.mode == Const.ROW_SELECT_SINGLE) {
       return (<TableColumn><input type="radio" name="selection" checked={selected} onChange={this.handleSelectRowColumChange.bind(this)}/></TableColumn>);
     }else {
-      return (<TableColumn><input type="checkbox" checked={selected} onChange={this.handleSelectRowColumChange.bind(this)}/></TableColumn>);
+      return (<TableColumn ><input type="checkbox" checked={selected} onChange={this.handleSelectRowColumChange.bind(this)}/></TableColumn>);
     }
   }
 
@@ -219,6 +244,7 @@ TableBody.propTypes = {
   data: React.PropTypes.array,
   columns: React.PropTypes.array,
   striped: React.PropTypes.bool,
+  bordered: React.PropTypes.bool,
   hover: React.PropTypes.bool,
   condensed: React.PropTypes.bool,
   keyField: React.PropTypes.string,

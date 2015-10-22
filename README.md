@@ -1,83 +1,69 @@
 # react-bootstrap-table
-It's a react table for bootstrap, named reactbsTable
+It's a react.js table for bootstrap, named reactbsTable. It's a configurable, functional table component and make you build a Bootstrap Table more efficiency and easy in your React application, However ```react-bootstrap-table``` support these features:
 
-As you know, the basic bootstrap table function like striped, bordered, hover and condensed are supported.
+- column align
+- column hidden
+- scrolling table
+- data sort
+- cell format
+- pagination
+- row selection
+- column filter
+- cell edit with multi type editor
+- Insert & Delete Row
+- row and column style customize
+- Search
 
-In addition, reactbsTable support these features:
+You can see more about this component on [here](http://allenfang.github.io/react-bootstrap-table/index.html). and example is on [here](http://allenfang.github.io/react-bootstrap-table/example.html).
 
-* column align
-* column hidden
-* scrolling table
-* data sort
-* cell format
-* pagination
-* row selection
-* column filter
-* cell edit
-* Insert & Delete Row
-* Search
+## Development
+```react-bootstrap-table``` dependencies on react 0.14.x and Bootstrap 3 written by ES6 and use gulp and browserify for building and bundling.
 
-You can see the [home page](http://allenfang.github.io/react-bootstrap-table/index.html). and example is on [here](http://allenfang.github.io/react-bootstrap-table/example.html).
-
-### Release Notes
-v0.8.2 support hidden column.
-
-v0.8.0 Update data on the fly.
-
-v0.7.2 react-bootstrap-table supported search on table.
-
-v0.7.1 react-bootstrap-table supported column filter on table.
-
-v0.6.0, react-bootstrap-table supported insert and delete row on table.
-
-After v0.5.4, the <code>isKey</code> attribute is required by <code>TableHeaderColumn</code> for specifying which column is unique. You can see the example in th Usage section or [here](http://allenfang.github.io/react-bootstrap-table/start.html)
-
-### Development
-reactbsTable dependencies on react 0.13.x and Bootstrap 3
-
-reactbsTable written by ES6 and use gulp and browserify to build
-
-Use following command to prepare development
+You can use the following commands to prepare development
 ```
 $ git clone https://github.com/AllenFang/react-bootstrap-table.git
 $ cd react-bootstrap-table
 $ npm install
 ```
-Use gulp to build the reactbsTable
+Use gulp to build the react-bootstrap-table
 ```
 $ gulp dev  #for development
+$ gulp example-server #see all examples, go to localhost:3004/example-list.html
 $ gulp prod #for production
 ```
 
-### Usage
-Download reactbsTable first.
+## Usage
+Download react-bootstrap-table first.
 ```
 npm install react-bootstrap-table --save
 ```
-Use reactbsTable in your react app
-
-You can import reactbsTable in module(CommonJS/AMD)
+Use ```react-bootstrap-table``` in your react app, you should import ```react-bootstrap-table``` as first. About importing this component, there'r two way in the following you can choose:
+#### Module(CommonJS/AMD)
 ```
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';  // in ECMAScript 6
-// or
+// or in ECMAScript 5
 var ReactBSTable = require("react-bootstrap-table");  
 var BootstrapTable = ReactBSTable.BootstrapTable;
 var TableHeaderColumn = ReactBSTable.TableHeaderColumn;
 ```
-Finally, you need import the css file to your app
+#### Browser global(window object)
+```
+<script src="path/to/react-bootstrap-table/dist/react-bootstrap-table.min.js" />
+<script>
+  var ReactBsTable = window.BootstrapTable;
+  //...
+<script/>
+```
+
+Finally, you need to import the css file to your app
 ```
 <link rel="stylesheet" href="./css/react-bootstrap-table.min.css">
 ```
-the react-bootstrap-table.min.css file you can find in the css folder
-
-After import reactbsTable, use it in your react app
-
-You can find more detail example code in example folder
+The ```react-bootstrap-table.min.css``` file you can find in the css folder.After import css file, you can start to write your react application with ```react-bootstrap-table```. In the below, it's a simple demo for using ```react-bootstrap-table```:
 
 ```
-// products will be presented by reactbsTable
-var products = [
-  {
+// products will be presented by react-bootstrap-table
+var products = [{
       id: 1,
       name: "Item name 1",
       price: 100
@@ -97,76 +83,67 @@ var products = [
       id: 5,
       name: "Item name 5",
       price: 100
-  },{
-      id: 6,
-      name: "Item name 6",
-      price: 100
-  }
-];
+}];
 // It's a data format example.
 function priceFormatter(cell, row){
   return '<i class="glyphicon glyphicon-usd"></i> ' + cell;
 }
 
 React.render(
-  <BootstrapTable data={products} height="120" striped={true} hover={true}>
+  <BootstrapTable data={products} striped={true} hover={true}>
       <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
       <TableHeaderColumn dataField="name" dataSort={true}>Product Name</TableHeaderColumn>
       <TableHeaderColumn dataField="price" dataFormat={priceFormatter}>Product Price</TableHeaderColumn>
   </BootstrapTable>,
-	document.getElementById("basic")
+	document.getElementById("app")
 );
 ```
+### See react-bootstrap-table examples
+```
+$ git clone https://github.com/AllenFang/react-bootstrap-table.git
+$ cd react-bootstrap-table
+$ npm install
+$ gulp example-server #after start, open browser and go to http://localhost:3004/example-list.html
+```
 
-### API&Attribute
+### Documents
 
 You can reference [here](http://allenfang.github.io/react-bootstrap-table/docs.html) on web site
 
-####The attributes in &lt;BootstrapTable&gt;:</br>
-Use ```data``` to specify the data that you want to display on table.</br>
-Use ```height``` to set the table height, default is 100%.</br>
-Use ```striped``` to set table be a striped columns. Like bootstrap table class ```.table-striped```.</br>
-Use ```hover``` to enable table hover. Like bootstrap table class ```.table-hover```.</br>
-Use ```condensed``` to set a condensed table. Like bootstrap table class ```.table-condensed```.</br>
-Use ```pagination``` to enable the pagnation on table.</br>
-Use ```insertRow``` to enable the insert row on table.</br>
-Use ```deleteRow``` to enable the delete row on table.</br>
-Use ```columnFilter``` to enable the column filter on table.</br>
-Use ```search``` to enable the search on table.</br>
-Use ```searchPlaceholder``` to change the placeholder text in the search field.</br>
-Use ```selectRow``` to enable the row selection on table, this attribute accept an object which contain these properties.</br>
-- ```mode```(required): radio/checkbox, to specify the selection is single or multiple.</br>
-- ```clickToSelect```(optional): if true, click on row will trigger row selection, default is false.</br>
-- ```hideSelectColumn```(optional): if true, the radio/checkbox column will be hidden, if you enable clickToSelect.</br>
-- ```clickToSelectAndEditCell```(optional): if true, click the row will trigger selection on that row, and also trigger cell editing if you enabled cell edit.</br>
-- ```bgColor```(optional): You can assign background color if row be selected.</br>
-- ```selected```(optional): it's for default selected row on table, give an array object which contain selected row keys.</br>
-- ```onSelect```(optional): accept a callback function, if a row be selected, this function will be called.</br>
-- ```onSelectAll```(optional): accept a callback function, if select all in ```checkbox``` mode, this function will be called.</br>
+#### The attributes on &lt;BootstrapTable&gt;:
+| Attr         | Type   | Description                                            |
+| -------------| ------ | -------------------------------------------------------|
+| data         | Array  | Assign the data you want to display on table.          |
+| height       | String | Set the height of table, default is 100%.              |
+| bordered     | Bool   | Default is true, if false, become a borderless table   |
+| striped      | Bool   | Same as Bootstrap table class ```.table-striped```, default is false. |
+| hover        | Bool   | Same as Bootstrap table class ```.table-hover```, default is false. |
+| condensed    | Bool   | Same as Bootstrap table class ```.table-condensed```, default is false. |
+| columnFilter | Bool   | Set true to enable the column filter on table.         |
+| pagination   | Bool   | Set true to enable pagination on table .               |
+| insertRow    | Bool   | Set true to enable row insertion on table.             |
+| deleteRow    | Bool   | Set true to enable row deletion on table.              |
+| search       | Bool   | Set true to enable search function on table.           |
+| searchPlaceholder | String   | The place holder on search text fields          |
+| trClassName  | String or Function | Assign the row(tr) class, accept string or function, if use function, will pass ```rowData``` and ```rowIndex``` params and should return string presented class. for examples:</br>**function trClassFormat(rowData,rowIndex){**</br>&nbsp;&nbsp;&nbsp;**return rowIndex%2==0?"tr-odd":"tr-even";**</br>**}**      |
+| selectRow | Object | Assign an object which have these properties as follow:</br>**```mode```**(required): radio/checkbox, to specify the selection is single or multiple.</br>**```clickToSelect```**(optional): if true, click on row will trigger row selection, default is false.</br>**```clickToSelectAndEditCell```**(optional): if true, click the row will trigger selection on that row, and also trigger cell editing if you enabled cell edit.</br>**```bgColor```**(optional): You can assign background color if row be selected.</br>**```selected```**(optional): it's for default selected row on table, give an array object which contain selected row keys.</br>**```onSelect```**(optional): accept a callback function, if a row be selected, this function will be called and pass the ```row``` and ```isSelected``` as params.</br>**```onSelectAll```**(optional): accept a callback function, if select all in ```checkbox``` mode, this function will be called and pass ```isSelected``` and ```currentSelectedAndDisplayData``` as params.</br>**```hideSelectColumn```**(optional): if true, the radio/checkbox column will be hidden, if you enable clickToSelect.</br> |
+| cellEdit | Object | Use cellEdit and assign an object to enable cell edit on table, this object contain these properties:</br>**```mode```**(required): click/dbclick, to spectify which condition will trigger cell editing.</br>**```blurToSave```**(optional): if true, when mouse blur on input field will trigger a save on cell, default is false.</br>**```afterSaveCell```**(optional): accept a callback function, after save cell, this function will be called and pass ```row```, ```cellName``` and ```cellValue``` as params.</br> |
+| options | Object | For some options setting on react-bootstrap-table, you can set the options attribute and give an object which contain the following properties</br>**```sortName```**: Assign a default sort field by this property</br>**```sortOrder```**(asc/desc): Assign a default sort order</br>**```afterTableComplete```**: Assign a callback function which will be called after table update</br>**```afterDeleteRow```**: Assign a callback function which will be called after row delete</br>**```afterInsertRow```**: Assign a callback function which will be called after row insert</br>**```page```**: accept a number, which means the page you want to show as default</br>**```sizePerPageList```**: you can change the dropdown list for size per page, accept an array object.</br>**```sizePerPage```**: means size per page you want to locate as default, accept a number.</br>**```paginationSize```**: define the pagination bar size, accept a number.</br>
 
-Use ```cellEdit``` to enable the cell editing on table, it accept a object which contain these properties</br>
-- ```mode```(required): click/dbclick, to spectify which condition will trigger cell editing.</br>
-- ```blurToSave```(optional): if true, when mouse blur on input field will trigger a save on cell, default is false.</br>
-- ```afterSaveCell```(optional): accept a callback function, after save cell, this function will be called.</br>
-
-Use ```options``` to set other settings for react-bootstrap-table, this prop accept an object which include these properties:<br/>
-- ```sortName```: Assign a default sort field by this property</br>
-- ```sortOrder```(asc/desc): Assign a default sort order</br>
-- ```afterTableComplete```: Assign a callback function which will be called after table update</br>
-- ```afterDeleteRow```: Assign a callback function which will be called after row delete</br>
-- ```afterInsertRow```: Assign a callback function which will be called after row insert</br>
-
-
-####The attributes in &lt;TableHeaderColumn&gt;:</br>
-Use ```isKey``` to specify which column is unique.</br>
-Use ```width``` to set the width on column</br>
-Use ```dataField``` to specify which column you want to show on this column.</br>
-Use ```dataAlign``` to set align in column. Available value is left, center, right, start and end.</br>
-Use ```dataSort``` to enable the sorting in column. Default value is false(disabled).</br>
-Use ```dataFormat``` to customize this column.Must give it as a function.</br>
-Use ```hidden``` to enable hidden column.</br>
-Use ```className``` to add custom css class for table column</br>
-Use ```sortFunc``` to customize your sort function.</br>
+#### The attributes in &lt;TableHeaderColumn&gt;:
+| Attr         | Type   | Description                                            |
+| ------------ | ------ | -------------------------------------------------------|
+| isKey        | Bool   | To specify which column is unique, it's required.      |
+| width        | String | Set the column width, ex: 70%, 150px.                  |
+| dataField    | String | Means which field of data you want to show on column.  |
+| dataAlign    | String | Set align in column,  value is left, center, right, start and end. |
+| dataSort     | Bool   | True to enable table sorting.                          |
+| dataFormat   | Function | To customize the column. Must give it as a function and pass ```cell```, ```row``` as params. This function should return a String or a React Component |
+| hidden       | Bool   | True to hide column.                                   |
+| className    | String or Function | Add custom css class on **table header** column, this attribute accept String or Function. If Function, will pass following data as parameters: ```cellData```,```rowData```,```rowIndex```,```columnIndex```. And this function should return a String which means the class you want to add.|
+| columnClassName | String or Function | Add custom css class for **table body column**, this attribute accept string or function. If Function, will pass following data as parameters: ```fieldValue```,```row```,```rowIdx```,```colIdx```. And this function should return a String which means the class you want to add.|
+| editable     | Bool or Object| True to set column editable, false is non-editable. If give Object, you can get more customization when editing cell, which object contain these properties:</br>{</br>&nbsp;&nbsp;type: //edit type, avaiable value is textarea, select, checkbox</br>&nbsp;&nbsp;validator: //give function for validation and pass cell value as param. This function should return Bool.</br>&nbsp;&nbsp;options:{</br>&nbsp;&nbsp;&nbsp;&nbsp;values:</br>&nbsp;&nbsp;&nbsp;&nbsp;//values means data in select or checkbox</br>&nbsp;&nbsp;&nbsp;&nbsp;//if checkbox, use : to separate value, ex: Y:N</br>&nbsp;&nbsp;}</br>}</br> |
+| sortFunc | Function | Give a customize function for data sorting |
 
 #### About TableDataSet
 After v0.8.0, react-bootstrap-table provide the ability of updating table data on fly. How to do it?

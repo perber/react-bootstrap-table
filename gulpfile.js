@@ -3,8 +3,8 @@ var browserify = require('browserify');
 var watchify   = require('watchify');
 var source 		 = require("vinyl-source-stream");
 var babel      = require('gulp-babel');
+var concatCss  = require('gulp-concat-css');
 var cssmin     = require('gulp-cssmin');
-var rename     = require('gulp-rename');
 
 var watching = false;
 var demo     = false;
@@ -17,9 +17,9 @@ gulp.task("prod", function(){
 			.pipe(babel())
 			.pipe(gulp.dest('./lib'));
 	gulp.src('./css/react-bootstrap-table.css')
+				.pipe(concatCss("./react-bootstrap-table.min.css"))
         .pipe(cssmin())
-        .pipe(rename({suffix: '.min'}))
-        .pipe(gulp.dest('./css'));
+				.pipe(gulp.dest('./css'));
 	buildProdDist();
 });
 
@@ -31,7 +31,7 @@ gulp.task("dev", function(){
 
 function buildDemoCode(){
 	demo = true;
-	browserifing("./example/js/demo.js", "demo.bundle.js", "./example/js");
+	browserifing("./demo/js/demo.js", "demo.bundle.js", "./demo/js");
 }
 
 function buildProdDist(){
@@ -73,3 +73,27 @@ function bundle(b, bundleName, dest){
 	.pipe(source(bundleName))
 	.pipe(gulp.dest(dest));
 }
+
+// Static server
+var webpack = require('webpack');
+var WebpackDevServer = require('webpack-dev-server');
+var config = require('./webpack.example.config');
+
+
+gulp.task('example-server',function(){
+
+	new WebpackDevServer(webpack(config), {
+		publicPath: config.serverConfig.publicPath,
+		contentBase:config.serverConfig.contentBase,
+		hot: true,
+		headers: { 'Access-Control-Allow-Origin': '*'},
+		historyApiFallback: true
+	}).listen(config.serverConfig.port, 'localhost', function (err, result) {
+			if (err) {
+				console.log(err);
+			}
+
+			console.log('Listening at localhost:3004');
+		});
+
+});
